@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import authRoute from './routes/auth.js'
 import postRoute from "./routes/post.js";
+import commentRoute from "./routes/comments.js";
+import fileUpload from "express-fileupload";
 
 const app = express()
 dotenv.config();
@@ -18,6 +20,10 @@ const MONGO_PASS = process.env.MONGO_PASS || 1234;
 app.use(cors())
 // приложение понимает что из фронтенда приходят данные в формате json
 app.use(express.json())
+// приложение понимает загрузку файлов
+app.use(fileUpload())
+// где будут храниться загруженные картинки
+app.use(express.static("uploads"));
 
 
 // routes
@@ -27,6 +33,9 @@ app.use("/api/auth", authRoute);
 
 // для постов
 app.use("/api/posts", postRoute);
+
+// для постов
+app.use("/api/comments", commentRoute);
 
 
 const start =  async () => {

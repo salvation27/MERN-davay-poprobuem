@@ -5,10 +5,22 @@ import { checkIsAuth, logout } from "../redux/features/auth/authSlice";
 import {toast} from 'react-toastify'
 
 const Navbar = () => {
-    const dispatch = useDispatch();
-  const [user,setUser] =useState(null)
+  const dispatch = useDispatch();
+  const [user, setUser] = useState(null);
   const isAuth = useSelector(checkIsAuth);
   const dataUser = useSelector((state) => state.auth.user);
+
+  // делаем всплівашку  если пост создан
+  const { status } = useSelector((state) => state.post);
+
+  useEffect(() => {
+    if (status) {
+      toast(`${status}`);
+    }
+  }, [status]);
+
+  // делаем всплівашку  если пост создан
+
   // делаем активную страницу -подсвечиваем меню
   const activeStyle = {
     color: "red",
@@ -18,7 +30,7 @@ const Navbar = () => {
   const logoutHandler = () => {
     dispatch(logout());
     window.localStorage.removeItem("token");
-    toast("Вы вышли с системы");
+    toast("Вы вышли из системы");
   };
 
   useEffect(() => {
@@ -59,31 +71,23 @@ const Navbar = () => {
             </li>
           </>
         )}
-        <li className="hover:text-red-500">
-          <NavLink
-            style={({ isActive }) => (isActive ? activeStyle : null)}
-            to="/posts"
-          >
-            Posts
-          </NavLink>
-        </li>
+
         {isAuth && (
           <>
+            <li className="hover:text-red-500">
+              <NavLink
+                style={({ isActive }) => (isActive ? activeStyle : null)}
+                to="/posts"
+              >
+                My Posts
+              </NavLink>
+            </li>
             <li className="hover:text-red-500">
               <NavLink
                 style={({ isActive }) => (isActive ? activeStyle : null)}
                 to="/add"
               >
                 Add Post
-              </NavLink>
-            </li>
-            <li className="hover:text-red-500">
-              <NavLink
-                style={({ isActive }) => (isActive ? activeStyle : null)}
-                // to={`/post/edit/${_id}`}
-                to="/add"
-              >
-                Edit Post
               </NavLink>
             </li>
           </>
@@ -99,8 +103,8 @@ const Navbar = () => {
         <>
           <div>
             {user ? (
-              <div className="w-10 uppercase text-2xl flex items-center justify-center h-10 bg-gray-200">
-                {user.username[0]}
+              <div className="text-2xl flex items-center justify-center px-1 rounded border-2 border-black bg-gray-200">
+                {user.username}
               </div>
             ) : (
               ""

@@ -11,7 +11,7 @@ const UserChema = new mongoose.Schema({
     required: true,
   },
   //   ссілка на другую схему
-  post: [
+  posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref:'Post'
